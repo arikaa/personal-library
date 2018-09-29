@@ -4,6 +4,11 @@ import { authHeader } from '../helpers/auth-header';
 
 const apiUrl = 'http://localhost:3001';
 
+// remove user from local storage to log the user out
+function logout() {
+  localStorage.removeItem('user');
+}
+
 function handleResponse(response) {
   return response.text().then((text) => {
     const data = text && JSON.parse(text);
@@ -35,11 +40,6 @@ function login(username, password) {
       }
       return user;
     });
-}
-
-// remove user from local storage to log the user out
-function logout() {
-  localStorage.removeItem('user');
 }
 
 function getById(id) {

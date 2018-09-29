@@ -32,6 +32,24 @@ function search(searchTerm) {
     });
 }
 
+function getBook(book) {
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+
+  return fetch(`${googleAPI}/v1/volumes/${book}?key=${keyAPI}`, requestOptions)
+    .then(handleResponse)
+    .then((book) => {
+      console.log('retrieved from Google: ', book);
+      const loadedBooks = JSON.parse(localStorage.getItem('books.loadedBooks'));
+      loadedBooks.push(book);
+      localStorage.setItem('books.loadedBooks', JSON.stringify(loadedBooks));
+      return loadedBooks;
+    });
+}
+
 export const booksService = {
   search,
+  getBook,
 };

@@ -5,7 +5,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import { userActions } from '../actions/user.actions';
+import { bookActions } from '../actions/books.actions';
 import MenuAppBar from './MenuAppBar';
+import BookCard from './BookCard';
 
 const styles = {
   addBook: {
@@ -21,32 +23,60 @@ function Library(props) {
   const { books } = props;
   return (
     <div>
-      {(books.length === 1) ? (
-        <div>{books}</div>
-      ) : (books.map(book => (<div>{book}</div>)))
+      {(books.map((book, i) => (
+        <BookCard
+          key={i}
+          id={book.id}
+          title={book.volumeInfo.title}
+          authors={book.volumeInfo.authors}
+          image={book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.smallThumbnail}
+        />
+      )))
       }
     </div>
   );
 }
 
 Library.propTypes = {
-  books: PropTypes.arrayOf(PropTypes.string).isRequired,
+  books: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 class HomePage extends React.Component {
-  componentDidMount() {
-    const { dispatch } = this.props;
-    // dispatch(userActions.getCurrent);
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loadedBooks: [],
+    };
+
+    this.handleLoadLibrary = this.handleLoadLibrary.bind(this);
   }
+
+  componentWillMount() {
+    this.handleLoadLibrary();
+    localStorage.setItem('books.loadedBooks', JSON.stringify([]));
+  }
+
 
   handleDeleteUser(id) {
     const { dispatch } = this.props;
     return () => dispatch(userActions.delete(id));
   }
 
-  render() {
-    const { classes, user } = this.props;
+  handleLoadLibrary() {
+    const { books } = this.state;
+    const { user, dispatch } = this.props;
+    if (user.books && user.books.length > 0) {
+      user.books.forEach((book) => {
+        // call Google API request to get books and add to state collection
+        dispatch(bookActions.getGoogleBook(book));
+      });
+    }
+  }
 
+  render() {
+    const { classes, user, loadedBooks } = this.props;
+    console.log('loaded: ', loadedBooks);
     return (
       <div>
         <MenuAppBar />
@@ -62,17 +92,19 @@ class HomePage extends React.Component {
           </Button>
           <h1 className={classes.addLabel}>Add a Book</h1>
         </div>
-        {user.books && <Library books={user.books} />}
+        {loadedBooks && <Library books={loadedBooks} />}
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { authentication } = state;
+  const { authentication, books } = state;
   const { user } = authentication;
+  const { loadedBooks } = books;
   return {
     user,
+    loadedBooks,
   };
 }
 
