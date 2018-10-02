@@ -42,7 +42,7 @@ class AddBookPage extends React.Component {
   handleAddBook(bookID) {
     const { dispatch, user } = this.props;
     if (bookID) {
-      const updatedUser = { ...user, books: [...user.books, bookID] };
+      const updatedUser = { ...user, books: [...user.books, { [bookID]: 'Leave a book note here' }] };
       dispatch(userActions.addBook(updatedUser));
     }
   }

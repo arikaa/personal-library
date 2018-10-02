@@ -32,6 +32,12 @@ export default function authentication(state = initialState, action) {
       return { user: action.user };
     case userConstants.ADD_BOOK_FAILURE:
       return {};
+    case userConstants.ADD_NOTE:
+      return {};
+    case userConstants.ADD_NOTE_SUCCESS:
+      return { user: action.user };
+    case userConstants.ADD_NOTE_FAILURE:
+      return {};
     default:
       return state;
   }

@@ -12,9 +12,6 @@ router.get('/:id', getById);
 router.put('/:id', update);
 router.delete('/:id', _delete);
 
-router.put('/:id/addBook', addBook);
-
-
 module.exports = router;
 
 function authenticate(req, res, next){
@@ -42,15 +39,11 @@ function getById(req, res, next) {
 }
 
 function update(req, res, next) {
+  console.log('id: ', req.params.id);
+  console.log('body: ', req.body);
   userService.update(req.params.id, req.body)
       .then(() => res.json({}))
       .catch(err => next(err));
-}
-
-function addBook(req, res, next){
-  userService.addBook(req.params.id, req.body)
-  .then(() => res.json({}))
-  .catch(err => next(err));
 }
 
 function _delete(req, res, next) {

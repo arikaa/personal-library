@@ -20,6 +20,10 @@ export const userConstants = {
   ADD_BOOK: 'USERS_ADD_BOOK',
   ADD_BOOK_SUCCESS: 'USERS_ADD_BOOK_SUCCESS',
   ADD_BOOK_FAILURE: 'USERS_ADD_BOOK_FAILURE',
+
+  ADD_NOTE: 'USERS_ADD_NOTE',
+  ADD_NOTE_SUCCESS: 'USERS_ADD_NOTE_SUCCESS',
+  ADD_NOTE_FAILURE: 'USERS_ADD_NOTE_FAILURE',
 };
 
 function login(username, password) {
@@ -86,6 +90,24 @@ function addBook(user) {
   };
 }
 
+function addNote(user) {
+  function request(user) { return { type: userConstants.ADD_NOTE, user }; }
+  function success(user) { return { type: userConstants.ADD_NOTE_SUCCESS, user }; }
+  function failure(error) { return { type: userConstants.ADD_NOTE_FAILURE, error }; }
+
+  return (dispatch) => {
+    dispatch(request(user));
+    userService.update(user)
+      .then(() => {
+        dispatch(success(user));
+        history.push('/');
+      },
+      (error) => {
+        dispatch(failure(error.toString()));
+      });
+  };
+}
+
 function _delete(id) { // eslint-disable-line no-underscore-dangle
   function request(id) { return { type: userConstants.DELETE_REQUEST, id }; }
   function success(id) { return { type: userConstants.DELETE_SUCCESS, id }; }
@@ -107,5 +129,6 @@ export const userActions = {
   login,
   logout,
   register,
+  addNote,
   delete: _delete,
 };

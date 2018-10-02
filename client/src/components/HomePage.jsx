@@ -7,7 +7,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { userActions } from '../actions/user.actions';
 import { bookActions } from '../actions/books.actions';
 import MenuAppBar from './MenuAppBar';
-import BookCard from './BookCard';
+import BookList from './BookList';
 
 const styles = {
   addBook: {
@@ -19,35 +19,23 @@ const styles = {
   },
 };
 
-function Library(props) {
-  const { books } = props;
-  return (
-    <div>
-      {(books.map((book, i) => (
-        <BookCard
-          key={i}
-          id={book.id}
-          title={book.volumeInfo.title}
-          authors={book.volumeInfo.authors}
-          image={book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.smallThumbnail}
-        />
-      )))
-      }
-    </div>
-  );
+function mapNotesToGoogleBooks(notes, books) {
+  let updatedBooks;
+  if (books) {
+    updatedBooks = [...books];
+    updatedBooks.map((book) => {
+      const localBook = notes.filter(note => Object.keys(note)[0] === book.id);
+      book.note = localBook[0][book.id]; // eslint-disable-line no-param-reassign
+    });
+  }
+  return updatedBooks;
 }
-
-Library.propTypes = {
-  books: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
 
 class HomePage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loadedBooks: [],
-    };
+    this.state = {};
 
     this.handleLoadLibrary = this.handleLoadLibrary.bind(this);
   }
@@ -64,19 +52,26 @@ class HomePage extends React.Component {
   }
 
   handleLoadLibrary() {
-    const { books } = this.state;
     const { user, dispatch } = this.props;
     if (user.books && user.books.length > 0) {
       user.books.forEach((book) => {
         // call Google API request to get books and add to state collection
-        dispatch(bookActions.getGoogleBook(book));
+        dispatch(bookActions.getGoogleBook(Object.keys(book)[0]));
       });
     }
   }
 
   render() {
     const { classes, user, loadedBooks } = this.props;
-    console.log('loaded: ', loadedBooks);
+    let booksWithNotes = null;
+
+    if (!user){
+      return '';
+    }
+    if (loadedBooks) {
+      booksWithNotes = mapNotesToGoogleBooks(user.books, loadedBooks);
+    }
+
     return (
       <div>
         <MenuAppBar />
@@ -92,7 +87,7 @@ class HomePage extends React.Component {
           </Button>
           <h1 className={classes.addLabel}>Add a Book</h1>
         </div>
-        {loadedBooks && <Library books={loadedBooks} />}
+        {loadedBooks && <BookList books={booksWithNotes} />}
       </div>
     );
   }
