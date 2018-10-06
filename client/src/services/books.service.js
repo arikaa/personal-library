@@ -8,7 +8,6 @@ function handleResponse(response) {
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {
-        // TODO: handle 401
         console.log('401 error');
       }
       const error = (data && data.message) || response.statusText;
@@ -26,10 +25,7 @@ function search(searchTerm) {
 
   return fetch(`${googleAPI}/v1/volumes?q=${searchTerm}&key=${keyAPI}`, requestOptions)
     .then(handleResponse)
-    .then((books) => {
-      //localStorage.setItem('books.books', JSON.stringify(books));
-      return books.items;
-    });
+    .then(books => books.items);
 }
 
 function getBook(book) {
@@ -41,7 +37,6 @@ function getBook(book) {
   return fetch(`${googleAPI}/v1/volumes/${book}?key=${keyAPI}`, requestOptions)
     .then(handleResponse)
     .then((book) => {
-      console.log('retrieved from Google: ', book);
       const loadedBooks = JSON.parse(localStorage.getItem('books.loadedBooks'));
       loadedBooks.push(book);
       localStorage.setItem('books.loadedBooks', JSON.stringify(loadedBooks));

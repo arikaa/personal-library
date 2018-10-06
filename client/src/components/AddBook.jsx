@@ -13,7 +13,7 @@ import MenuAppBar from './MenuAppBar';
 
 const styles = {};
 
-class AddBookPage extends React.Component {
+class AddBook extends React.Component {
   constructor(props) {
     super(props);
 
@@ -91,7 +91,7 @@ class AddBookPage extends React.Component {
   }
 }
 
-AddBookPage.propTypes = {
+AddBook.propTypes = {
   searching: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -108,9 +108,9 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedAddBookPage = connect(
+const connectedAddBook = connect(
   mapStateToProps,
   null,
-)(withStyles(styles)(AddBookPage));
+)(withStyles(styles)(AddBook));
 
-export { connectedAddBookPage as AddBookPage };
+export { connectedAddBook as AddBook };

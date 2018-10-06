@@ -15,15 +15,12 @@ class BookList extends React.Component {
 
   handleAddNote(note, bookID) {
     const { dispatch, user } = this.props;
-    console.log('here: ', note);
-    console.log('id: ', bookID);
     const updatedBooks = user.books.map((book) => {
       if (Object.keys(book)[0] === bookID) {
         return { [bookID]: note };
       }
       return book;
     });
-    console.log('updatedBooks: ', updatedBooks);
     const updatedUser = { ...user, books: updatedBooks };
     dispatch(userActions.addBook(updatedUser));
   }

@@ -67,8 +67,6 @@ function update(user) {
     body: JSON.stringify(user),
   };
 
-  console.log('adding: ', user);
-
   return fetch(`${apiUrl}/users/${user._id}`, requestOptions) // eslint-disable-line no-underscore-dangle
     .then(handleResponse)
     .then(() => {

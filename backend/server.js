@@ -1,4 +1,3 @@
-// server.js
 
 import 'rootpath';
 import express from 'express';
@@ -8,10 +7,8 @@ import cors from 'cors';
 import jwt from './helpers/jwt';
 import errorHandler from './helpers/error-handler';
 
-// creating instances
 const app = express();
 const router = express.Router();
-
 const API_PORT = process.env.API_PORT || 3001;
 
 // configure API to use bodyParser and look for JSON in the request
@@ -25,7 +22,7 @@ app.use(function(req, res, next) {
 });
 app.use(logger('dev'));
 
-// use JWT auth to secure the api
+// use JWT authentication to secure the api
 app.use(jwt());
 
 // api routes

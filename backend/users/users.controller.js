@@ -1,13 +1,13 @@
-// define user routes for the api
+// user routes for the api
 
 import express from 'express';
 import userService from './user.service';
 const router = express.Router();
 
-// routes
+// routes of the application
 router.post('/authenticate', authenticate);
 router.post('/register', register);
-router.get('/current', getCurrent); // TODO: use / for getCurrent
+router.get('/current', getCurrent);
 router.get('/:id', getById);
 router.put('/:id', update);
 router.delete('/:id', _delete);
@@ -39,8 +39,6 @@ function getById(req, res, next) {
 }
 
 function update(req, res, next) {
-  console.log('id: ', req.params.id);
-  console.log('body: ', req.body);
   userService.update(req.params.id, req.body)
       .then(() => res.json({}))
       .catch(err => next(err));

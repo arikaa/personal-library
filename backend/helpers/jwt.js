@@ -3,6 +3,7 @@ import expressJwt from 'express-jwt';
 import { getSecrets } from '../secrets';
 import userService from '../users/user.service';
 
+// jwt ensures the user login is valid unless a public route is specified
 export default function jwt() {
   const secret = getSecrets('secret');
   return expressJwt({ secret, isRevoked }).unless({
@@ -14,10 +15,10 @@ export default function jwt() {
   });
 }
 
+// isRevoked revokes the token if the user no longer exists
 async function isRevoked(req, payload, done) {
   const user = await userService.getById(payload.sub);
 
-  // revoke token is user no long exists
   if (!user){
     return done(null, true);
   }

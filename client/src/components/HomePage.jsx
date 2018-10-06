@@ -55,7 +55,7 @@ class HomePage extends React.Component {
     const { user, dispatch } = this.props;
     if (user.books && user.books.length > 0) {
       user.books.forEach((book) => {
-        // call Google API request to get books and add to state collection
+        // call Google api request to get books and add to state collection
         dispatch(bookActions.getGoogleBook(Object.keys(book)[0]));
       });
     }

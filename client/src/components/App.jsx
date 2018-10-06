@@ -6,7 +6,7 @@ import { PrivateRoute } from './PrivateRoute';
 import { HomePage } from './HomePage';
 import { LoginPage } from './LoginPage';
 import { RegisterPage } from './RegisterPage';
-import { AddBookPage } from './AddBookPage';
+import { AddBook } from './AddBook';
 import Container from './Container';
 import ApplicationTheme from '../theme';
 
@@ -18,7 +18,7 @@ export default function App() {
           <PrivateRoute exact path="/" component={HomePage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
-          <Route path="/addBook" component={AddBookPage} />
+          <Route path="/addBook" component={AddBook} />
         </Container>
       </Router>
     </MuiThemeProvider>
