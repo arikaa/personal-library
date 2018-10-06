@@ -61,22 +61,11 @@ async function update(id, userParam){
   if (userParam.password){
     userParam.hash = bcrypt.hashSync(userParam.password, 10);
   }
-  console.log('books: ', userParam.books);
-  await User.updateOne({ _id: id }, { books: userParam.books }, { upsert: true }, function(err, raw){
-    if (err) return err;
-    console.log('response: ', raw);
-  })
-
-  const newuser = await User.findById(id);
-  console.log('new user:', newuser);
-
 
   // copy userParam properties to user
-  /*   Object.assign(user.books, userParam.books);
+  Object.assign(user.books, userParam.books);
   user.markModified('books');
-  console.log('updated user: ', user);
   await user.save();
-  console.log('user: ', user); */
 
 }
 
